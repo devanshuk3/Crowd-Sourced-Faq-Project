@@ -81,6 +81,42 @@ const faqs = [
     viewCount: 36,
     tags: ['eligibility', 'general'],
   },
+  {
+    title: 'What is the Vicharanashala internship (VINS)?',
+    description: 'Can you describe the VINS internship program, its phases (Bronze, Silver, Gold, Platinum), and what badges stand for?',
+    category: 'General Information',
+    author: { name: 'Sudarshan Iyengar', email: 'sudarshan@iitrpr.ac.in' },
+    upvoteCount: 45,
+    viewCount: 280,
+    tags: ['internship', 'vicharanashala', 'badges'],
+  },
+  {
+    title: 'When can I start the internship and how long is the duration?',
+    description: 'Is there a flexible starting window for the internship? What is the duration and optional grace period?',
+    category: 'General Information',
+    author: { name: 'Amit Roy' },
+    upvoteCount: 38,
+    viewCount: 195,
+    tags: ['timing', 'duration', 'start-date'],
+  },
+  {
+    title: 'Who is eligible to sign the institutional NOC (No Objection Certificate)?',
+    description: 'Which academic officials can sign my NOC? Does it need to be physically signed and stamped?',
+    category: 'Registration',
+    author: { name: 'Sneha Gupta' },
+    upvoteCount: 52,
+    viewCount: 310,
+    tags: ['noc', 'document', 'verification'],
+  },
+  {
+    title: 'What is Rosetta and why does this thinking journal exist?',
+    description: 'Why do interns need to fill out a daily thinking routine journal called Rosetta? What is the purpose?',
+    category: 'General Information',
+    author: { name: 'Preeti Das' },
+    upvoteCount: 29,
+    viewCount: 154,
+    tags: ['rosetta', 'journal', 'thinking-routine'],
+  }
 ];
 
 const answers = [
@@ -119,6 +155,34 @@ const answers = [
     isAccepted: true,
     upvoteCount: 8,
   },
+  {
+    faqIndex: 8,
+    content: 'VINS is a two-month, full-time online engagement at the Vicharanashala Lab, IIT Ropar. You will work on real open-source projects under a mentor. It features 4 phases: Bronze (Bronze - Tailored Coursework/Training), Silver (Silver - Core Project Contributions), Gold (Gold - Exceptional Feature Contribution Recognition), and Platinum (Platinum - Visit invitation to the IIT Ropar lab). The program is completely free.',
+    author: { name: 'Vicharanashala Team', email: 'sudarshan@iitrpr.ac.in' },
+    isAccepted: true,
+    upvoteCount: 42,
+  },
+  {
+    faqIndex: 9,
+    content: 'VINS is highly flexible — you can start any time in 2026. The duration is exactly two months from your chosen start date, with an optional one-month grace period if required. A hard rule is that the internship must complete on or before 31 December 2026.',
+    author: { name: 'Program Coordinator' },
+    isAccepted: true,
+    upvoteCount: 33,
+  },
+  {
+    faqIndex: 10,
+    content: 'Any authorized academic signatory at your institution can sign the NOC: HOD, Acting HOD, Principal, Dean, Director, or the Training & Placement Officer (TPO). It must carry the signatory\'s handwritten signature, an official rubber stamp, and their email address for validation.',
+    author: { name: 'Verification Office' },
+    isAccepted: true,
+    upvoteCount: 49,
+  },
+  {
+    faqIndex: 11,
+    content: 'Rosetta is a daily thinking journal containing a 65-day private routine completed by the intern. It helps you process, articulate, and reflect on what you learned, while providing the lab qualitative insights on how to improve the cohort experience.',
+    author: { name: 'L&D Mentor' },
+    isAccepted: true,
+    upvoteCount: 25,
+  }
 ];
 
 async function seed() {
