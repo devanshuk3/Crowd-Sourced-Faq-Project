@@ -76,7 +76,6 @@ export default function AskPage() {
     else if (form.title.trim().length < 10) e.title = 'Title must be at least 10 characters';
     if (!form.description.trim()) e.description = 'Description is required';
     if (!form.category) e.category = 'Please select a category';
-    if (!form.authorName.trim()) e.authorName = 'Your name is required';
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -96,6 +95,32 @@ export default function AskPage() {
   const set = (key) => (e) => setForm(f => ({ ...f, [key]: e.target.value }));
 
   const hasSimilar = similarQuery.data && similarQuery.data.length > 0;
+
+  if (!isLoggedIn) {
+    return (
+      <main>
+        <div className="container" style={{ maxWidth: 500, padding: '80px 24px', textAlign: 'center' }}>
+          <div style={{ border: '2px solid var(--black)', padding: '40px 32px', background: 'var(--white)', boxShadow: '4px 4px 0 var(--border)' }}>
+            <div style={{ fontSize: '2.5rem', marginBottom: 16 }}>🔒</div>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.8rem', marginBottom: 12, letterSpacing: '-0.01em' }}>
+              Authentication Required
+            </h2>
+            <p style={{ color: 'var(--gray-600)', fontSize: '0.9rem', lineHeight: 1.5, marginBottom: 28 }}>
+              To submit a question to the Samagama community, you must first register or sign in to your account.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <Link to="/login" className="btn btn-filled" style={{ justifyContent: 'center', height: 44, textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+                Sign In / Sign Up
+              </Link>
+              <Link to="/" className="btn btn-ghost" style={{ justifyContent: 'center', height: 44, textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+                Back to Browse
+              </Link>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main>
@@ -168,28 +193,14 @@ export default function AskPage() {
 
           <hr className="divider" />
 
-          {isLoggedIn ? (
-            <div style={{ padding: '16px 20px', border: '1.5px solid var(--black)', background: 'var(--gray-100)', marginBottom: 20 }}>
-              <span className="mono" style={{ fontSize: '0.78rem', color: 'var(--gray-600)', display: 'block', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600, marginBottom: 4 }}>
-                Author Session Active
-              </span>
-              <span style={{ fontSize: '0.92rem', fontWeight: 500 }}>
-                Posting as: {form.authorName} <span className="text-muted">({form.authorEmail})</span>
-              </span>
-            </div>
-          ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-              <div className="form-group">
-                <label className="form-label">Your Name *</label>
-                <input className="form-input" value={form.authorName} onChange={set('authorName')} placeholder="Full name" />
-                {errors.authorName && <span className="form-error">{errors.authorName}</span>}
-              </div>
-              <div className="form-group">
-                <label className="form-label">Email <span style={{ color: 'var(--gray-400)', fontWeight: 400, textTransform: 'none' }}>(optional)</span></label>
-                <input className="form-input" type="email" value={form.authorEmail} onChange={set('authorEmail')} placeholder="you@example.com" />
-              </div>
-            </div>
-          )}
+          <div style={{ padding: '16px 20px', border: '1.5px solid var(--black)', background: 'var(--gray-100)', marginBottom: 20 }}>
+            <span className="mono" style={{ fontSize: '0.78rem', color: 'var(--gray-600)', display: 'block', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600, marginBottom: 4 }}>
+              Author Session Active
+            </span>
+            <span style={{ fontSize: '0.92rem', fontWeight: 500 }}>
+              Posting as: {form.authorName} <span className="text-muted">({form.authorEmail})</span>
+            </span>
+          </div>
 
           <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
             <button type="submit" className="btn btn-filled" disabled={createMut.isPending}>
