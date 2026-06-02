@@ -3,6 +3,8 @@ require('dotenv').config();
 
 const FAQ = require('./src/models/faq.model');
 const Answer = require('./src/models/answer.model');
+const User = require('./src/models/user.model');
+const crypto = require('crypto');
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/samagama';
 
@@ -125,7 +127,30 @@ async function seed() {
 
   await FAQ.deleteMany({});
   await Answer.deleteMany({});
+  await User.deleteMany({});
   console.log('Cleared existing data');
+
+  // Insert preseeded admin and student
+  const adminPasswordHash = crypto.createHash('sha256').update('admin123').digest('hex');
+  const studentPasswordHash = crypto.createHash('sha256').update('student123').digest('hex');
+
+  const seedUsers = [
+    {
+      name: 'Admin Director',
+      email: 'admin@samagama.com',
+      password: adminPasswordHash,
+      role: 'admin',
+    },
+    {
+      name: 'Jane Student',
+      email: 'student@samagama.com',
+      password: studentPasswordHash,
+      role: 'student',
+    }
+  ];
+
+  const createdUsers = await User.insertMany(seedUsers);
+  console.log(`Inserted ${createdUsers.length} seed users (Admin & Student)`);
 
   const createdFAQs = await FAQ.insertMany(faqs);
   console.log(`Inserted ${createdFAQs.length} FAQs`);

@@ -5,6 +5,8 @@ import AskPage from './pages/AskPage';
 import AnswerPage from './pages/AnswerPage';
 import FAQDetailPage from './pages/FAQDetailPage';
 import StatsPage from './pages/StatsPage';
+import LoginPage from './pages/LoginPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
 
 // Root layout
 const rootRoute = createRootRoute({
@@ -30,8 +32,10 @@ const indexRoute = createRoute({ getParentRoute: () => rootRoute, path: '/', com
 const askRoute = createRoute({ getParentRoute: () => rootRoute, path: '/ask', component: AskPage });
 const answerRoute = createRoute({ getParentRoute: () => rootRoute, path: '/answer', component: AnswerPage });
 const statsRoute = createRoute({ getParentRoute: () => rootRoute, path: '/stats', component: StatsPage });
+const loginRoute = createRoute({ getParentRoute: () => rootRoute, path: '/login', component: LoginPage });
+const adminRoute = createRoute({ getParentRoute: () => rootRoute, path: '/admin', component: AdminDashboardPage });
 const faqDetailRoute = createRoute({ getParentRoute: () => rootRoute, path: '/faq/$id', component: FAQDetailPage });
 
-const routeTree = rootRoute.addChildren([indexRoute, askRoute, answerRoute, statsRoute, faqDetailRoute]);
+const routeTree = rootRoute.addChildren([indexRoute, askRoute, answerRoute, statsRoute, loginRoute, adminRoute, faqDetailRoute]);
 
 export const router = createRouter({ routeTree });

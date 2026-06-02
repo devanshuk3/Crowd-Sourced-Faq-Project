@@ -31,6 +31,24 @@ export default function AskPage() {
     tags: '',
   });
   const [errors, setErrors] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    try {
+      const userJson = localStorage.getItem('user');
+      if (userJson) {
+        const user = JSON.parse(userJson);
+        setForm(f => ({
+          ...f,
+          authorName: user.name,
+          authorEmail: user.email,
+        }));
+        setIsLoggedIn(true);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
 
   const debouncedTitle = useDebounce(form.title, 600);
 
@@ -150,17 +168,28 @@ export default function AskPage() {
 
           <hr className="divider" />
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-            <div className="form-group">
-              <label className="form-label">Your Name *</label>
-              <input className="form-input" value={form.authorName} onChange={set('authorName')} placeholder="Full name" />
-              {errors.authorName && <span className="form-error">{errors.authorName}</span>}
+          {isLoggedIn ? (
+            <div style={{ padding: '16px 20px', border: '1.5px solid var(--black)', background: 'var(--gray-100)', marginBottom: 20 }}>
+              <span className="mono" style={{ fontSize: '0.78rem', color: 'var(--gray-600)', display: 'block', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600, marginBottom: 4 }}>
+                Author Session Active
+              </span>
+              <span style={{ fontSize: '0.92rem', fontWeight: 500 }}>
+                Posting as: {form.authorName} <span className="text-muted">({form.authorEmail})</span>
+              </span>
             </div>
-            <div className="form-group">
-              <label className="form-label">Email <span style={{ color: 'var(--gray-400)', fontWeight: 400, textTransform: 'none' }}>(optional)</span></label>
-              <input className="form-input" type="email" value={form.authorEmail} onChange={set('authorEmail')} placeholder="you@example.com" />
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+              <div className="form-group">
+                <label className="form-label">Your Name *</label>
+                <input className="form-input" value={form.authorName} onChange={set('authorName')} placeholder="Full name" />
+                {errors.authorName && <span className="form-error">{errors.authorName}</span>}
+              </div>
+              <div className="form-group">
+                <label className="form-label">Email <span style={{ color: 'var(--gray-400)', fontWeight: 400, textTransform: 'none' }}>(optional)</span></label>
+                <input className="form-input" type="email" value={form.authorEmail} onChange={set('authorEmail')} placeholder="you@example.com" />
+              </div>
             </div>
-          </div>
+          )}
 
           <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
             <button type="submit" className="btn btn-filled" disabled={createMut.isPending}>

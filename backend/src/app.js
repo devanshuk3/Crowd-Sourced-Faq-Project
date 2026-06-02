@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const faqRoutes = require('./routes/faq.routes');
 const answerRoutes = require('./routes/answer.routes');
+const userRoutes = require('./routes/user.routes');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 // Routes
 app.use('/faqs', faqRoutes);
 app.use('/answers', answerRoutes);
+app.use('/users', userRoutes);
 
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));

@@ -1,0 +1,122 @@
+import { useState } from 'react';
+import { useNavigate } from '@tanstack/react-router';
+import { loginUser } from '../api';
+import toast from 'react-hot-toast';
+
+export default function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e?.preventDefault();
+    if (!email || !password) {
+      toast.error('Email and password are required');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const user = await loginUser({ email, password });
+      localStorage.setItem('user', JSON.stringify(user));
+      
+      // Dispatch storage event to notify other components (e.g. Nav)
+      window.dispatchEvent(new Event('storage'));
+      
+      toast.success(`Welcome back, ${user.name}!`);
+      
+      if (user.role === 'admin') {
+        navigate({ to: '/admin' });
+      } else {
+        navigate({ to: '/' });
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Login failed. Please check credentials.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fastFill = (role) => {
+    if (role === 'admin') {
+      setEmail('admin@samagama.com');
+      setPassword('admin123');
+    } else {
+      setEmail('student@samagama.com');
+      setPassword('student123');
+    }
+  };
+
+  return (
+    <div className="container" style={{ maxWidth: 440, padding: '60px 24px' }}>
+      <div style={{ border: '2px solid var(--black)', padding: 32, background: 'var(--white)' }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', marginBottom: 6, letterSpacing: '-0.01em' }}>
+          Sign In
+        </h2>
+        <p style={{ color: 'var(--gray-600)', fontSize: '0.88rem', marginBottom: 28 }}>
+          Sama<em>gama</em> FAQ collaborative portal
+        </p>
+
+        <form onSubmit={handleLogin}>
+          <div className="form-group">
+            <label className="form-label">Email Address</label>
+            <input
+              type="email"
+              className="form-input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="e.g. name@example.com"
+              disabled={loading}
+              required
+            />
+          </div>
+
+          <div className="form-group" style={{ marginBottom: 28 }}>
+            <label className="form-label">Password</label>
+            <input
+              type="password"
+              className="form-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              disabled={loading}
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="btn btn-filled"
+            style={{ width: '100%', justifyContent: 'center', height: 44 }}
+            disabled={loading}
+          >
+            {loading ? 'Authenticating...' : 'Sign In'}
+          </button>
+        </form>
+
+        <div style={{ marginTop: 28, borderTop: '1px dashed var(--border)', paddingTop: 20 }}>
+          <span style={{ fontSize: '0.72rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--gray-400)', display: 'block', marginBottom: 12 }}>
+            Demo Quick Accounts
+          </span>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <button
+              onClick={() => fastFill('student')}
+              className="btn btn-ghost btn-sm"
+              style={{ flex: 1, justifyContent: 'center' }}
+            >
+              Jane Student
+            </button>
+            <button
+              onClick={() => fastFill('admin')}
+              className="btn btn-ghost btn-sm"
+              style={{ flex: 1, justifyContent: 'center' }}
+            >
+              Admin Director
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

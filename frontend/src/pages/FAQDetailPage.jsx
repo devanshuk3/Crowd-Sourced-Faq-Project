@@ -17,6 +17,24 @@ function InlineAnswerForm({ faqId, onDone }) {
   const [form, setForm] = useState({ content: '', authorName: '', authorEmail: '' });
   const [errors, setErrors] = useState({});
   const [open, setOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    try {
+      const userJson = localStorage.getItem('user');
+      if (userJson) {
+        const user = JSON.parse(userJson);
+        setForm(f => ({
+          ...f,
+          authorName: user.name,
+          authorEmail: user.email,
+        }));
+        setIsLoggedIn(true);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
 
   const mut = useMutation({
     mutationFn: createAnswer,
@@ -26,7 +44,7 @@ function InlineAnswerForm({ faqId, onDone }) {
       qc.invalidateQueries({ queryKey: ['faqs'] });
       toast.success('Answer submitted!');
       setOpen(false);
-      setForm({ content: '', authorName: '', authorEmail: '' });
+      setForm(f => ({ ...f, content: '' })); // keep author details but clear content
       onDone?.();
     },
     onError: (err) => toast.error(err?.response?.data?.message || 'Failed to submit'),
@@ -57,17 +75,30 @@ function InlineAnswerForm({ faqId, onDone }) {
           <textarea className="form-textarea" value={form.content} onChange={e => setForm(f => ({ ...f, content: e.target.value }))} placeholder="Write a clear, helpful answer..." style={{ minHeight: 120 }} />
           {errors.content && <span className="form-error">{errors.content}</span>}
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-          <div className="form-group">
-            <label className="form-label">Name *</label>
-            <input className="form-input" value={form.authorName} onChange={e => setForm(f => ({ ...f, authorName: e.target.value }))} placeholder="Full name" />
-            {errors.authorName && <span className="form-error">{errors.authorName}</span>}
+        
+        {isLoggedIn ? (
+          <div style={{ padding: '12px 16px', border: '1.5px solid var(--black)', background: 'var(--gray-100)', marginBottom: 20 }}>
+            <span className="mono" style={{ fontSize: '0.7rem', color: 'var(--gray-600)', display: 'block', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600, marginBottom: 2 }}>
+              Author Session Active
+            </span>
+            <span style={{ fontSize: '0.88rem', fontWeight: 500 }}>
+              Answering as: {form.authorName} <span className="text-muted">({form.authorEmail})</span>
+            </span>
           </div>
-          <div className="form-group">
-            <label className="form-label">Email <span style={{ color: 'var(--gray-400)', fontWeight: 400, textTransform: 'none' }}>(optional)</span></label>
-            <input className="form-input" type="email" value={form.authorEmail} onChange={e => setForm(f => ({ ...f, authorEmail: e.target.value }))} placeholder="you@example.com" />
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            <div className="form-group">
+              <label className="form-label">Name *</label>
+              <input className="form-input" value={form.authorName} onChange={e => setForm(f => ({ ...f, authorName: e.target.value }))} placeholder="Full name" />
+              {errors.authorName && <span className="form-error">{errors.authorName}</span>}
+            </div>
+            <div className="form-group">
+              <label className="form-label">Email <span style={{ color: 'var(--gray-400)', fontWeight: 400, textTransform: 'none' }}>(optional)</span></label>
+              <input className="form-input" type="email" value={form.authorEmail} onChange={e => setForm(f => ({ ...f, authorEmail: e.target.value }))} placeholder="you@example.com" />
+            </div>
           </div>
-        </div>
+        )}
+
         <div style={{ display: 'flex', gap: 10 }}>
           <button type="submit" className="btn btn-filled btn-sm" disabled={mut.isPending}>
             {mut.isPending ? 'Submitting...' : 'Submit Answer'}
