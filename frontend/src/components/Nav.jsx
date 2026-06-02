@@ -53,70 +53,28 @@ export default function Nav() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-          {/* Quick Nav Icon Links */}
+          {/* External FAQ Link */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, borderRight: '1.5px solid var(--border)', paddingRight: 18 }}>
-            <Link
-              to="/"
-              title="Browse FAQs"
+            <a
+              href="https://samagama.in/internship/faq"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Official Samagama FAQ"
               style={{
-                color: pathname === '/' ? 'var(--black)' : 'var(--gray-400)',
+                color: 'var(--gray-400)',
                 transition: 'color 0.2s',
                 display: 'flex',
                 alignItems: 'center',
               }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
-            </Link>
-            <Link
-              to="/ask"
-              title="Ask a Question"
-              style={{
-                color: pathname === '/ask' ? 'var(--black)' : 'var(--gray-400)',
-                transition: 'color 0.2s',
-                display: 'flex',
-                alignItems: 'center',
-              }}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--black)'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'var(--gray-400)'}
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
                 <line x1="12" y1="17" x2="12.01" y2="17" />
               </svg>
-            </Link>
-            <Link
-              to="/answer"
-              title="Answer Questions"
-              style={{
-                color: pathname === '/answer' ? 'var(--black)' : 'var(--gray-400)',
-                transition: 'color 0.2s',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                <path d="m9 10 2 2 4-4" />
-              </svg>
-            </Link>
-            <Link
-              to="/stats"
-              title="Statistics"
-              style={{
-                color: pathname === '/stats' ? 'var(--black)' : 'var(--gray-400)',
-                transition: 'color 0.2s',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="20" x2="18" y2="10" />
-                <line x1="12" y1="20" x2="12" y2="4" />
-                <line x1="6" y1="20" x2="6" y2="14" />
-              </svg>
-            </Link>
+            </a>
           </div>
 
           {/* Session / Sign In Container */}
