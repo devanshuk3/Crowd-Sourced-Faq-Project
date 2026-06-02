@@ -38,16 +38,6 @@ export default function LoginPage() {
     }
   };
 
-  const fastFill = (role) => {
-    if (role === 'admin') {
-      setEmail('admin@samagama.com');
-      setPassword('admin123');
-    } else {
-      setEmail('student@samagama.com');
-      setPassword('student123');
-    }
-  };
-
   return (
     <div className="container" style={{ maxWidth: 440, padding: '60px 24px' }}>
       <div style={{ border: '2px solid var(--black)', padding: 32, background: 'var(--white)' }}>
@@ -94,28 +84,6 @@ export default function LoginPage() {
             {loading ? 'Authenticating...' : 'Sign In'}
           </button>
         </form>
-
-        <div style={{ marginTop: 28, borderTop: '1px dashed var(--border)', paddingTop: 20 }}>
-          <span style={{ fontSize: '0.72rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--gray-400)', display: 'block', marginBottom: 12 }}>
-            Demo Quick Accounts
-          </span>
-          <div style={{ display: 'flex', gap: 10 }}>
-            <button
-              onClick={() => fastFill('student')}
-              className="btn btn-ghost btn-sm"
-              style={{ flex: 1, justifyContent: 'center' }}
-            >
-              Jane Student
-            </button>
-            <button
-              onClick={() => fastFill('admin')}
-              className="btn btn-ghost btn-sm"
-              style={{ flex: 1, justifyContent: 'center' }}
-            >
-              Admin Director
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
