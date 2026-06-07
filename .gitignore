@@ -34,3 +34,7 @@ out/
 *.sln
 *.sw?
 .DS_Store
+
+# Local Database
+mongodb_data/
+
