@@ -1,5 +1,6 @@
 const FAQ = require('../models/faq.model');
 const Answer = require('../models/answer.model');
+const { invalidateIndex } = require('../chatbot/utils/fuseSearch');
 
 const CATEGORIES = ['Registration', 'Technical Events', 'Cultural Events', 'Accommodation', 'Transportation', 'General Information'];
 
@@ -68,6 +69,7 @@ exports.createFAQ = async (req, res) => {
 
     const faq = new FAQ({ title, description, category, author, tags });
     await faq.save();
+    invalidateIndex();
     res.status(201).json(faq);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -83,6 +85,7 @@ exports.updateFAQ = async (req, res) => {
 
     const faq = await FAQ.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true });
     if (!faq) return res.status(404).json({ message: 'FAQ not found' });
+    invalidateIndex();
     res.json(faq);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -95,6 +98,7 @@ exports.deleteFAQ = async (req, res) => {
     const faq = await FAQ.findByIdAndDelete(req.params.id);
     if (!faq) return res.status(404).json({ message: 'FAQ not found' });
     await Answer.deleteMany({ faqId: req.params.id });
+    invalidateIndex();
     res.json({ message: 'FAQ deleted successfully' });
   } catch (err) {
     res.status(500).json({ message: err.message });

@@ -7,6 +7,8 @@ import FAQDetailPage from './pages/FAQDetailPage';
 import StatsPage from './pages/StatsPage';
 import LoginPage from './pages/LoginPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
+import ChatPage from './chatbot/pages/ChatPage';
+import ChatWidget from './chatbot/components/ChatWidget';
 
 // Root layout
 const rootRoute = createRootRoute({
@@ -24,6 +26,7 @@ const rootRoute = createRootRoute({
           </span>
         </div>
       </footer>
+      <ChatWidget />
     </>
   ),
 });
@@ -35,7 +38,8 @@ const statsRoute = createRoute({ getParentRoute: () => rootRoute, path: '/stats'
 const loginRoute = createRoute({ getParentRoute: () => rootRoute, path: '/login', component: LoginPage });
 const adminRoute = createRoute({ getParentRoute: () => rootRoute, path: '/admin', component: AdminDashboardPage });
 const faqDetailRoute = createRoute({ getParentRoute: () => rootRoute, path: '/faq/$id', component: FAQDetailPage });
+const chatRoute = createRoute({ getParentRoute: () => rootRoute, path: '/chat', component: ChatPage });
 
-const routeTree = rootRoute.addChildren([indexRoute, askRoute, answerRoute, statsRoute, loginRoute, adminRoute, faqDetailRoute]);
+const routeTree = rootRoute.addChildren([indexRoute, askRoute, answerRoute, statsRoute, loginRoute, adminRoute, faqDetailRoute, chatRoute]);
 
 export const router = createRouter({ routeTree });

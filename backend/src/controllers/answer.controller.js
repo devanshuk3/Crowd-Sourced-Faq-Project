@@ -1,5 +1,6 @@
 const Answer = require('../models/answer.model');
 const FAQ = require('../models/faq.model');
+const { invalidateIndex } = require('../chatbot/utils/fuseSearch');
 
 // GET /answers/:faqId
 exports.getAnswersByFAQ = async (req, res) => {
@@ -29,6 +30,7 @@ exports.createAnswer = async (req, res) => {
 
     // Update FAQ status to Answered
     await FAQ.findByIdAndUpdate(faqId, { status: 'Answered' });
+    invalidateIndex();
 
     res.status(201).json(answer);
   } catch (err) {
@@ -46,6 +48,7 @@ exports.updateAnswer = async (req, res) => {
 
     const answer = await Answer.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true });
     if (!answer) return res.status(404).json({ message: 'Answer not found' });
+    invalidateIndex();
     res.json(answer);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -63,6 +66,7 @@ exports.deleteAnswer = async (req, res) => {
     if (remainingAnswers === 0) {
       await FAQ.findByIdAndUpdate(answer.faqId, { status: 'Unanswered' });
     }
+    invalidateIndex();
 
     res.json({ message: 'Answer deleted' });
   } catch (err) {

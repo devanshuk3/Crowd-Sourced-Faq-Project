@@ -46,6 +46,7 @@ export default function Nav() {
             <li><Link to="/ask" className={pathname === '/ask' ? 'active' : ''}>Ask</Link></li>
             <li><Link to="/answer" className={pathname === '/answer' ? 'active' : ''}>Answer</Link></li>
             <li><Link to="/stats" className={pathname === '/stats' ? 'active' : ''}>Stats</Link></li>
+            <li><Link to="/chat" className={pathname === '/chat' ? 'active' : ''}>Chat</Link></li>
             {user?.role === 'admin' && (
               <li><Link to="/admin" className={pathname === '/admin' ? 'active' : ''}>Admin</Link></li>
             )}
