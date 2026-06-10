@@ -4,40 +4,8 @@ A high-performance, community-driven FAQ platform and knowledge base designed fo
 
 ---
 
-## 🏗️ System Architecture
 
-```mermaid
-graph TD
-    subgraph Frontend [React SPA - Port 5173]
-        UI[User Interface / Chat Widget]
-        TR[TanStack Router]
-        TQ[TanStack Query]
-    end
-
-    subgraph Backend [Express API Gateway - Port 3001]
-        RTR[API Router]
-        MW[Auth & Role Middleware]
-        CTRL[Controllers - FAQ, Answer, User, Chat]
-        FS[Fuse.js Fuzzy Search Index]
-    end
-
-    subgraph Database [MongoDB - Port 27018]
-        DB[(Local Database: samagama)]
-    end
-
-    UI --> TR
-    UI --> TQ
-    TQ -->|HTTP REST API| RTR
-    RTR --> MW
-    MW --> CTRL
-    CTRL -->|Mongoose ODM| DB
-    CTRL -->|Fuzzy Queries| FS
-    FS -.->|Lazy Cache Rebuild| DB
-```
-
----
-
-## 🚀 Key Differences: What Makes This More Than a "General" FAQ Project?
+## Key Points: Differentiating factors from general faq projects
 
 Traditional FAQ applications are usually simple CRUD list sites with direct keyword lookups (like SQL `LIKE %query%` or basic Mongo regex). This system implements several advanced engineering patterns:
 
