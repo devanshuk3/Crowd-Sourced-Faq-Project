@@ -37,6 +37,34 @@ graph TD
 
 ---
 
+## 🚀 Key Differences: What Makes This More Than a "General" FAQ Project?
+
+Traditional FAQ applications are usually simple CRUD list sites with direct keyword lookups (like SQL `LIKE %query%` or basic Mongo regex). This system implements several advanced engineering patterns:
+
+1. **Intelligent In-Memory Fuzzy Search Pipeline**:
+   * Instead of direct database queries, the application uses an in-memory cached search index powered by `Fuse.js`.
+   * It uses **fine-tuned field weights** (Title: `0.30`, Tags: `0.25`, Description: `0.20`, Answers: `0.15`) to calculate relevance.
+   * Matches below a strict **confidence score of 0.40** are rejected as irrelevant, allowing the chatbot to gracefully reject gibberish or out-of-scope queries instead of returning bad answers.
+
+2. **Event-Driven Lazy Cache Rebuilding**:
+   * To prevent high database read/write overhead and maintain rapid search times (<10ms), the search index is cached.
+   * Upon FAQ/Answer mutations (Create/Update/Delete), the system triggers `invalidateIndex()`, marking the cache as stale.
+   * The index is **rebuilt lazily** on the next search request, rather than on every update or using pollers, keeping the API fast and optimized.
+
+3. **Deduplicated Analytics Backlog (Unanswered Queries)**:
+   * Chatbot misses are normalized (lowercased, whitespace-stripped) and stored in a dedicated database collection.
+   * By using MongoDB's atomic `$inc` operator on a unique index, duplicate queries increment an `askCount` instead of bloating the DB. This serves as a real-time, priority-ranked content backlog for administrators.
+
+4. **Closed-Loop Admin Moderation Workflow**:
+   * Admins have a direct panel to review this unanswered backlog.
+   * They can convert any unresolved user query into an official FAQ with a draftable answer directly from the dashboard, completing the content-creation feedback loop.
+
+5. **Stateless Client Data Synchronization**:
+   * State is managed through `TanStack Query`, eliminating bloated local states.
+   * The client updates optimistically, and data invalidation is mapped directly to mutation events. For example, upvoting an answer triggers an automatic, background refetch of that FAQ's details.
+
+---
+
 ## 🛠️ Engineering Priority Stack & Implementations
 
 ### 1. Database Schema & Persistence Layer
